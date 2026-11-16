@@ -1,26 +1,71 @@
-DROP TABLE CANCION;
+DROP TABLE CANCION_GENERO CASCADE CONSTRAINTS;
+DROP TABLE CANCION CASCADE CONSTRAINTS;
+DROP TABLE ALBUM CASCADE CONSTRAINTS;
+DROP TABLE SELLO CASCADE CONSTRAINTS;
+DROP TABLE GENERO CASCADE CONSTRAINTS;
+DROP TABLE ARTISTA CASCADE CONSTRAINTS;
+
+CREATE TABLE ARTISTA(
+    id_artista NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nombre varchar2(100) NOT NULL,
+    esta_verificado CHAR(1),
+    biografia varchar2(250)
+);
+CREATE TABLE GENERO(
+    id_genero NUMBER generated always as identity primary key,
+    nombre varchar2 (100) NOT NULL UNIQUE
+);
+CREATE TABLE sello(
+    id_sello NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nombre varchar2(100) NOT NULL
+);
+
+CREATE TABLE ALBUM(
+    id_album NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    titulo varchar2(100) NOT NULL,
+    fecha_lanzamiento date,
+    id_sello NUMBER REFERENCES SELLO(id_sello)
+);
 
 CREATE TABLE CANCION(
     id_cancion NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY ,
     titulo VARCHAR2(200),
-    artista VARCHAR2(200),
-    album VARCHAR2(200),
-    genero VARCHAR2(200),
+    id_artista NUMBER REFERENCES ARTISTA(id_artista),
+    id_album NUMBER REFERENCES ALBUM(id_album),
+    id_genero NUMBER,
     duracion_segundos NUMBER,
     fecha_lanzamiento DATE
 );
 
-INSERT INTO CANCION( titulo, artista, album, genero, duracion_segundos, fecha_lanzamiento ) VALUES ( 'Dont Cry', 'guns and roses', 'Use you illusions', 'Rock', 200, DATE '1991-09-17');
-
-INSERT INTO CANCION( titulo, artista, album, genero, duracion_segundos, fecha_lanzamiento ) VALUES ('November Rain', 'Guns n Roses', 'Use you illusions', 'Rock', 240, DATE '1991-09-17');
 
 
+CREATE TABLE CANCION_GENERO(
+    id_cancion NUMBER REFERENCES CANCION(id_cancion),
+    id_genero NUMBER REFERENCES GENERO(id_genero)
 
-INSERT INTO CANCION( titulo, artista, album, genero, duracion_segundos, fecha_lanzamiento ) VALUES ( 'Strainch', 'Guns %&% Roses', 'Use you illusions', 'Rock', 240, DATE '1991-09-17');
+);
 
+INSERT INTO ARTISTA(nombre, ESTA_VERIFICADO) VALUES('Michael Jackson', 'S');
+INSERT INTO ARTISTA(nombre, ESTA_VERIFICADO) VALUES('Los Prisioneros', 'S');
+INSERT INTO ARTISTA(nombre, ESTA_VERIFICADO) VALUES('31 Minutos', 'S');
+INSERT INTO ARTISTA(nombre, ESTA_VERIFICADO) VALUES('Gustao el quesos', 'N');
+
+INSERT INTO GENERO(nombre) VALUES('Pop');
+INSERT INTO GENERO(nombre) VALUES('Merengue');
+INSERT INTO GENERO(nombre) VALUES('Rock');
+INSERT INTO GENERO(nombre) VALUES('Rap');
+INSERT INTO GENERO(nombre) VALUES('Reggaeton');
+
+INSERT INTO SELLO(nombre) VALUES('EMI music');
+INSERT INTO SELLO(nombre) VALUES('Epic Records');
+INSERT INTO SELLO(nombre) VALUES('La Oreja');
+INSERT INTO SELLO(nombre) VALUES('Soei de pueltomon');
+INSERT INTO SELLO(nombre) VALUES('WY Records');
+
+INSERT INTO ALBUM(TITULO, FECHA_LANZAMIENTO, ID_SELLO) values('Off the wall', '12-01-1979', 2);
+INSERT INTO ALBUM(TITULO, FECHA_LANZAMIENTO, ID_SELLO) values('Pateando Piedras', '09-05-1986', 3);
+INSERT INTO ALBUM(TITULO, FECHA_LANZAMIENTO, ID_SELLO) values('31 minutos', '02-07-2004', 2);
+INSERT INTO ALBUM(TITULO, FECHA_LANZAMIENTO, ID_SELLO) values('¿Por qué?', '09-28-2026', 5);
+INSERT INTO CANCION(TITULO,DURACION_SEGUNDOS,FECHA_LANZAMIENTO,ID_ARTISTA,ID_GENERO,ID_ALBUM) VALUES('Underground');
 COMMIT;
-
-
-DELETE FROM CANCION WHERE ID_CANCION = 1;
-
-commit;
+SELECT * FROM ARTISTA;
